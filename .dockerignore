@@ -1,0 +1,11 @@
+.gradle/
+build/
+data/
+node_modules/
+.idea/
+.git/
+.DS_Store
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+*.db

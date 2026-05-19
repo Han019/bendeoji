@@ -1,0 +1,29 @@
+# Copy this file to fly.toml and change app/primary_region before deploying.
+app = "bendeoji"
+primary_region = "nrt"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  APP_DATABASE_PATH = "/app/data/bendeoji.sqlite"
+
+[[mounts]]
+  source = "bendeoji_data"
+  destination = "/app/data"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]

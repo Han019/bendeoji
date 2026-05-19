@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bendeoji</title>
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">B</div>
+        <div class="title-block">
+          <h1>벤더지 잡기!</h1>
+          <p>30초 동안 서버 점수로 겨루는 두더지 잡기</p>
+        </div>
+      </div>
+      <form class="player-form" id="playerForm">
+        <input class="player-input" id="playerName" name="playerName" maxlength="20" autocomplete="nickname" placeholder="플레이어 이름" required>
+        <button class="primary-button" id="startButton" type="submit">게임 시작</button>
+      </form>
+    </header>
+
+    <main class="game-layout">
+      <section class="game-panel" aria-label="게임판">
+        <div class="hud">
+          <div class="stat-card">
+            <div class="stat-label">Score</div>
+            <div class="stat-value" id="scoreValue">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Time</div>
+            <div class="stat-value" id="timeValue">30.0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Hits</div>
+            <div class="stat-value" id="hitsValue">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Misses</div>
+            <div class="stat-value" id="missesValue">0</div>
+          </div>
+        </div>
+        <div class="board-wrap">
+          <div class="board" id="board" aria-live="polite"></div>
+        </div>
+        <div class="status-bar">
+          <span id="statusText">이름을 입력하고 시작하세요.</span>
+          <span id="sessionText">Ready</span>
+        </div>
+      </section>
+
+      <aside class="side-panel">
+        <h2 class="side-title">Leaderboard</h2>
+        <p class="side-subtitle">점수, 명중 수, 플레이 시간 순으로 정렬됩니다.</p>
+        <div class="leaderboard" id="leaderboard"></div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="/assets/game.js" defer></script>
+</body>
+</html>

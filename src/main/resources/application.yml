@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: bendeoji
+  sql:
+    init:
+      mode: never
+
+server:
+  port: ${PORT:8080}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+
+app:
+  database:
+    path: ${APP_DATABASE_PATH:data/bendeoji.sqlite}
+  game:
+    duration-seconds: 30
+    spawn-interval-millis: 700
+    visible-millis: 950
+    points-per-hit: 10
+    hit-leniency-millis: 450
