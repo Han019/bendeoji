@@ -36,6 +36,39 @@ docker run --rm -p 8080:8080 \
   bendeoji
 ```
 
+## Railway 배포
+
+이 프로젝트는 루트의 `Dockerfile`과 `railway.toml`을 기준으로 Railway에 배포합니다. Railway는 배포 시 `PORT` 환경변수를 주입하고, 앱은 `server.port=${PORT:8080}` 설정으로 그 포트를 사용합니다.
+
+### 1. GitHub에 올려서 배포
+
+1. 이 프로젝트를 GitHub 저장소에 push합니다.
+2. Railway 대시보드에서 `New Project`를 누릅니다.
+3. `Deploy from GitHub repo`를 선택하고 저장소를 연결합니다.
+4. Railway가 루트의 `Dockerfile`을 감지해서 빌드합니다.
+5. 서비스가 만들어지면 `Settings` 또는 `Volumes`에서 Volume을 추가합니다.
+6. Volume mount path는 `/app/data`로 설정합니다.
+7. 서비스 `Variables`에 아래 값을 추가합니다.
+
+```text
+APP_DATABASE_PATH=/app/data/bendeoji.sqlite
+```
+
+8. `Networking`에서 `Generate Domain`을 눌러 공개 URL을 만듭니다.
+
+### 2. CLI로 배포
+
+```bash
+brew install railway
+railway login
+railway init
+railway up
+```
+
+배포 후 Railway 대시보드에서 Volume을 `/app/data`에 붙이고, `APP_DATABASE_PATH=/app/data/bendeoji.sqlite` 변수를 설정합니다.
+
+헬스체크 경로는 `railway.toml`에 `/api/health`로 설정되어 있습니다.
+
 ## Fly.io 배포
 
 `fly.toml.example`을 복사해서 앱 이름을 본인 Fly 앱 이름으로 바꿉니다.
@@ -91,6 +124,7 @@ npm run build:css
 - `POST /api/games/{sessionId}/hits/{eventId}`: 보이는 두더지 hit 처리
 - `POST /api/games/{sessionId}/finish`: 게임 종료 및 리더보드 저장
 - `GET /api/leaderboard?limit=10`: 리더보드 조회
+- `GET /api/health`: 배포 헬스체크
 
 ## 구현 메모
 
