@@ -2,6 +2,7 @@
 build/
 out/
 data/
+data-docker/
 node_modules/
 .DS_Store
 *.sqlite
