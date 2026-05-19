@@ -106,7 +106,19 @@
     @apply absolute left-1/2 bottom-[-62%] h-[88%] max-h-[82px] -translate-x-1/2 select-none opacity-0 transition-all duration-150 ease-out;
   }
 
-  .hole-cell.is-active .mole-img {
+  .mole-img-hit {
+    @apply scale-95;
+  }
+
+  .hole-cell.is-active .mole-img-up {
+    @apply bottom-[14%] opacity-100;
+  }
+
+  .hole-cell.is-active.is-hit .mole-img-up {
+    @apply bottom-[14%] opacity-0;
+  }
+
+  .hole-cell.is-active.is-hit .mole-img-hit {
     @apply bottom-[14%] opacity-100;
   }
 

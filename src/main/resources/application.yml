@@ -20,6 +20,6 @@ app:
   game:
     duration-seconds: 30
     spawn-interval-millis: 700
-    visible-millis: 950
+    visible-millis: 1100
     points-per-hit: 10
     hit-leniency-millis: 450

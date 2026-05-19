@@ -110,11 +110,17 @@ npm run build:css
 게임 에셋 위치:
 
 - 두더지: `src/main/resources/static/assets/mole.svg`
+- 맞은 두더지: `src/main/resources/static/assets/mole-hit.svg`
 - 기본 뿅망치 커서: `src/main/resources/static/assets/mallet-cursor.svg`
 - 클릭 중 뿅망치 커서: `src/main/resources/static/assets/mallet-cursor-down.svg`
 - 타격음: `src/main/resources/static/assets/hit.wav`
 
 같은 파일명으로 교체하면 코드 수정 없이 반영됩니다. PNG/JPG/WebP 파일로 바꿔도 괜찮습니다. 파일 확장자를 바꾸는 경우에는 `GameService.config()`의 `AssetPaths` 값 또는 `/api/game/config` 응답을 사용하는 프론트 로직을 같이 바꾸면 됩니다. `hit.wav`가 없으면 브라우저 Web Audio로 만든 기본 타격음이 재생됩니다.
+
+두더지 이미지는 두 단계로 렌더링됩니다.
+
+- `mole.svg`: 구멍에서 올라와 있을 때
+- `mole-hit.svg`: 서버가 hit를 인정했을 때 짧게 표시
 
 ## API 요약
 

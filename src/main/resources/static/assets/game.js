@@ -12,6 +12,8 @@ const elements = {
   leaderboard: document.querySelector('#leaderboard')
 };
 
+const HIT_REACTION_MILLIS = 340;
+
 let gameConfig = null;
 let sessionId = null;
 let startedAt = 0;
@@ -36,12 +38,14 @@ async function loadConfig() {
   gameConfig = await response.json();
   elements.time.textContent = gameConfig.durationSeconds.toFixed(1);
   prepareHitAudio(gameConfig.assets.hitSound);
-  renderBoard(gameConfig.rows, gameConfig.assets.mole);
+  renderBoard(gameConfig.rows, gameConfig.assets);
 }
 
-function renderBoard(rows, moleAsset) {
+function renderBoard(rows, assets) {
   elements.board.innerHTML = '';
   let holeIndex = 0;
+  const moleAsset = assets.mole;
+  const moleHitAsset = assets.moleHit || assets.mole;
 
   rows.forEach((count, rowIndex) => {
     const row = document.createElement('div');
@@ -57,7 +61,8 @@ function renderBoard(rows, moleAsset) {
       hole.setAttribute('aria-label', `${holeIndex + 1}번 구멍`);
       hole.innerHTML = `
         <span class="hole-bowl"></span>
-        <img class="mole-img" src="${moleAsset}" alt="">
+        <img class="mole-img mole-img-up" src="${moleAsset}" alt="">
+        <img class="mole-img mole-img-hit" src="${moleHitAsset}" alt="">
       `;
       hole.addEventListener('click', () => handleHoleClick(hole));
       row.appendChild(hole);
@@ -96,7 +101,7 @@ async function handleStart(event) {
     gameConfig = payload.config;
     unlockAudio();
     prepareHitAudio(gameConfig.assets.hitSound);
-    renderBoard(gameConfig.rows, gameConfig.assets.mole);
+    renderBoard(gameConfig.rows, gameConfig.assets);
     startSchedule(payload.schedule);
   } catch (error) {
     elements.status.textContent = '게임을 시작할 수 없습니다. 서버 상태를 확인하세요.';
@@ -130,6 +135,7 @@ function showMole(event) {
     return;
   }
 
+  hole.classList.remove('is-hit', 'is-pending-hit');
   hole.classList.add('is-active');
   hole.dataset.eventId = String(event.id);
 
@@ -155,6 +161,9 @@ async function handleHoleClick(hole) {
     markEmpty(hole);
     return;
   }
+  if (hole.classList.contains('is-pending-hit') || hole.classList.contains('is-hit')) {
+    return;
+  }
 
   const active = activeEvents.get(eventId);
   if (active) {
@@ -162,9 +171,7 @@ async function handleHoleClick(hole) {
     activeEvents.delete(eventId);
   }
 
-  hole.classList.add('is-hit');
-  hideMole(hole);
-  window.setTimeout(() => hole.classList.remove('is-hit'), 160);
+  hole.classList.add('is-pending-hit');
 
   try {
     const response = await fetch(`/api/games/${sessionId}/hits/${eventId}`, {
@@ -177,19 +184,34 @@ async function handleHoleClick(hole) {
       applyState(payload);
       if (payload.accepted) {
         playHitSound();
+        showHitMole(hole);
+      } else {
+        hideMole(hole);
       }
       elements.status.textContent = payload.accepted ? 'Hit!' : payload.message;
     } else {
+      hideMole(hole);
       elements.status.textContent = payload.message || '점수 반영에 실패했습니다.';
     }
   } catch (error) {
+    hideMole(hole);
     elements.status.textContent = '네트워크 오류로 hit가 반영되지 않았습니다.';
   }
 }
 
 function hideMole(hole) {
-  hole.classList.remove('is-active');
+  hole.classList.remove('is-active', 'is-hit', 'is-pending-hit');
   delete hole.dataset.eventId;
+}
+
+function showHitMole(hole) {
+  hole.classList.remove('is-pending-hit');
+  hole.classList.add('is-active', 'is-hit');
+  delete hole.dataset.eventId;
+
+  window.setTimeout(() => {
+    hideMole(hole);
+  }, HIT_REACTION_MILLIS);
 }
 
 function markEmpty(hole) {

@@ -39,7 +39,8 @@ public class GameService {
                 properties.getVisibleMillis(),
                 properties.getPointsPerHit(),
                 new GameConfigResponse.AssetPaths(
-                        "/assets/mole.svg",
+                        "/assets/normal_benti.png",
+                        "/assets/hit_benti.png",
                         "/assets/mallet-cursor.svg",
                         "/assets/mallet-cursor-down.svg",
                         "/assets/hit.wav"

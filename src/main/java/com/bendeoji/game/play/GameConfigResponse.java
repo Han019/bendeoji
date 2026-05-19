@@ -14,6 +14,7 @@ public record GameConfigResponse(
 
     public record AssetPaths(
             String mole,
+            String moleHit,
             String hammerCursor,
             String hammerCursorDown,
             String hitSound
